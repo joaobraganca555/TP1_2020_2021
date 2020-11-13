@@ -113,13 +113,14 @@ public class main {
         } catch (OrderException | ContainerException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        //4. Validate
         try {
             order.validate();
         } catch (ContainerException | PositionException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //5. Order's conclusion
         try {
             order.setStatus(OrderStatus.CLOSED);
             order.setStatus(OrderStatus.SHIPPED);
@@ -127,12 +128,7 @@ public class main {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
-            order.setStatus(OrderStatus.RECEIVED);
-        } catch (OrderException | ContainerException | PositionException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        //6. Exporter usage
         System.out.println(DELIMITER + " Begin Exporter " + DELIMITER);
         IExporter exporter = new ExporterJSON("files/test.json");
         try {
