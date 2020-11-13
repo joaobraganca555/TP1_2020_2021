@@ -24,23 +24,9 @@ import java.util.logging.Logger;
  * Escola Superior de Tecnologia e Gestão (ESTG)<br>
  * Politécnico do Porto (PP)<br>
  * Licenciatura em Engenharia Informática (LEI)<br>
- * Licenciatura em Segurança Informática em Redes de Computadores (LSIRC)<br>
- * Paradigmas de Programação (PP)<br>
- * 2019 / 2020<br>
+ * Engenharia de Software 2<br>
+ * 2020 / 2021<br>
  * </h2>
- * <p>
- * Represents the <code>OrderStatus</code> Enumeration
- * </p>
- * <p>
- * Authors:
- * </p>
- * <ul>
- * <li>@author <a href="rjs@estg.ipp.pt">Ricardo Santos</a></li>
- * <li>@author <a href="bmo@estg.ipp.pt">Bruno Oliveira</a></li>
- * <li>@author <a href="fas@estg.ipp.pt">Fábio Silva</a></li>
- * <li>@author <a href="jrmr@estg.ipp.pt">João Ramos</a></li>
- * <li>@author <a href="oao@estg.ipp.pt">Óscar Oliveira</a></li>
- * </ul>
  *
  */
 public class main {
