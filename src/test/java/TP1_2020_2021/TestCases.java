@@ -44,74 +44,10 @@ class TestCases {
     void tc2_ecp2_testeAdicionarItem(){
         try {
             Container cont1 = new Container("cont1",20,10,10);
-            cont1.close();
             Item item1 = new Item(5,2,2,"item1","");
             Position pos1 = new Position(1,1,1);
 
-            assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, Color.aqua),"Can't add item, container is closed!");
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc3_ecp3_testeAdicionarItem(){
-        try {
-            Container cont1 = new Container("cont1",20,10,10,3);
-
-            Item item1 = new Item(5,2,2,"item1","");
-            Item item2 = new Item(3,2,1,"item2","");
-            Item item3 = new Item(5,3,6,"item3","");
-            Item item4 = new Item(4,1,2,"item4","");
-            Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(2,2,2);
-            Position pos3 = new Position(3,3,3);
-            Position pos4 = new Position(4,4,4);
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
-            cont1.addItem(item3, pos3, Color.black);
-
-            assertTrue(cont1.addItem(item4, pos4, Color.gray));
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc4_ecp4_testeAdicionarItem(){
-        try {
-            Container cont1 = new Container("cont1",20,10,10,3);
-
-            Item item1 = new Item(2,2,2,"item1","");
-            Item item2 = new Item(2,2,2,"item2","");
-            Item item3 = new Item(5,3,6,"item3","");
-            Item item4 = new Item(4,1,2,"item4","");
-            Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(2,2,2);
-            Position pos3 = new Position(3,3,3);
-            Position pos4 = new Position(4,4,4);
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
-            cont1.addItem(item3, pos3, Color.black);
-
-            cont1.close();
-
-            assertThrows(ContainerException.class, () -> cont1.addItem(item4, pos4, Color.gray));
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc5_ecp4_testeAdicionarItem(){
-        try {
-            Container cont1 = new Container("cont1",20,10,10,2);
-
-            Item item1 = new Item(2,2,2,"item1","");
-            Item item2 = new Item(2,2,2,"item2","");
-
-            Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(1,1,1);
-
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
+            cont1.addItem(item1, pos1, Color.black);
 
             assertFalse(cont1.addItem(item1, pos1, Color.aqua));
 
@@ -119,98 +55,46 @@ class TestCases {
     }
 
     @Test
-    void tc6_ecp5_testeAdicionarItem(){
+    void tc3_ecp2_testeAdicionarItem(){
         try {
-            Container cont1 = new Container("cont1",20,10,10,4);
-
+            Container cont1 = new Container("cont1",20,10,10);
             Item item1 = new Item(5,2,2,"item1","");
-            Item item2 = new Item(3,2,1,"item2","");
-            Item item3 = new Item(5,3,6,"item3","");
-
             Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(2,2,2);
-            Position pos3 = new Position(3,3,3);
 
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
-
-            assertTrue(cont1.addItem(item3, pos3, Color.black));
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc7_ecp6_testeAdicionarItem(){
-        try {
-            Container cont1 = new Container("cont1",20,10,10,4);
-
-            Item item1 = new Item(5,2,2,"item1","");
-            Item item2 = new Item(3,2,1,"item2","");
-            Item item3 = new Item(5,3,6,"item3","");
-
-            Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(2,2,2);
-            Position pos3 = new Position(3,3,3);
-
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
-            cont1.addItem(item3, pos3, Color.black);
-
-            assertFalse(cont1.addItem(item3, pos3, Color.black));
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc8_ecp6_testeAdicionarItem(){
-        try {
-            Container cont1 = new Container("cont1",20,10,10,4);
-
-            Item item1 = new Item(5,2,2,"item1","");
-            Item item2 = new Item(3,2,1,"item2","");
-            Item item3 = new Item(5,3,6,"item3","");
-
-            Position pos1 = new Position(1,1,1);
-            Position pos2 = new Position(2,2,2);
-            Position pos3 = new Position(3,3,3);
-
-            cont1.addItem(item1, pos1, Color.aqua);
-            cont1.addItem(item2, pos2, Color.green);
             cont1.close();
 
-            assertThrows(ContainerException.class, () -> cont1.addItem(item3, pos3, Color.black));
+            assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, Color.aqua),"Can't add item, container is closed!");
 
         } catch (PositionException | ContainerException e) {}
     }
 
     @Test
-    void tc9_bva1_testeAdicionarItem(){
+    void tc4_bva1_testeAdicionarItem(){
         Container cont1 = new Container("cont1",20,10,10,4);
         assertThrows(ContainerException.class, () -> cont1.addItem(null, null, null));
     }
 
     @Test
-    void tc10_bva2_testeAdicionarItem(){
+    void tc5_bva2_testeAdicionarItem(){
         Container cont1 = new Container("cont1",20,10,10,4);
         Item item1 = new Item(2,3,4,"item1","");
         assertThrows(ContainerException.class, () -> cont1.addItem(item1, null, null));
     }
 
     @Test
-    void tc11_bva3_testeAdicionarItem(){
-        Container cont1 = new Container("cont1",20,10,10,4);
-        Item item1 = new Item(2,3,4,"item1","");
+    void tc6_bva3_testeAdicionarItem(){
         try {
+            Container cont1 = new Container("cont1",20,10,10,4);
+            Item item1 = new Item(2,3,4,"item1","");
             Position pos1 = new Position(1,1,1);
             assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, null));
         } catch (PositionException e) {}
     }
 
     @Test
-    void tc12_bva4_testeAdicionarItem(){
+    void tc7_bva4_testeAdicionarItem(){
         try {
             Container cont1 = new Container("cont1",20,10,10,4);
-
             Item item1 = new Item(5,2,2,"item1","");
             Position pos1 = new Position(1,1,1);
 
@@ -220,10 +104,9 @@ class TestCases {
     }
 
     @Test
-    void tc13_bva5_testeAdicionarItem() {
+    void tc8_bva5_testeAdicionarItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
-
             Item item1 = new Item(2, 2, 2, "item1", "");
             Item item2 = new Item(2, 2, 2, "item2", "");
             Item item3 = new Item(5, 3, 6, "item3", "");
@@ -244,7 +127,7 @@ class TestCases {
     //------------------------------------------------------------------
 
     @Test
-    void tc14_ecp1_testeRemoverItem(){
+    void tc9_ecp1_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -258,7 +141,7 @@ class TestCases {
     }
 
     @Test
-    void tc15_ecp2_testeRemoverItem(){
+    void tc10_ecp2_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -273,7 +156,7 @@ class TestCases {
     }
 
     @Test
-    void tc16_ecp3_testeRemoverItem(){
+    void tc11_ecp2_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -285,21 +168,7 @@ class TestCases {
     }
 
     @Test
-    void tc17_ecp4_testeRemoverItem(){
-        try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
-
-            cont1.close();
-
-            assertThrows(ContainerException.class, ()-> cont1.removeItem(item1));
-
-        } catch (PositionException | ContainerException e) {}
-    }
-
-    @Test
-    void tc18_bva1_testeRemoverItem(){
+    void tc12_bva1_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -313,7 +182,7 @@ class TestCases {
     }
 
     @Test
-    void tc19_bva2_testeRemoverItem(){
+    void tc13_bva2_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -327,7 +196,7 @@ class TestCases {
     }
 
     @Test
-    void tc20_bva3_testeRemoverItem(){
+    void tc14_bva3_testeRemoverItem(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -349,22 +218,20 @@ class TestCases {
     //-----------------------------------------------------------
 
     @Test
-    void tc21_ecp1_testeAdicionarContentor(){
+    void tc15_ecp1_testeAdicionarContentor(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
             Position pos1 = new Position(1, 1, 1);
+
             cont1.addItem(item1, pos1, Color.fuchsia);
             cont1.close();
 
-            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
-            Customer customer = new Customer("John Doe", add1, add1);
-
-            Person destination = new Person("Jane Doe", add2);
-
-            ShippingOrder ship = new ShippingOrder(customer, destination);
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
             assertTrue(ship.addContainer(cont1));
@@ -373,126 +240,84 @@ class TestCases {
     }
 
     @Test
-    void tc22_ecp2_testeAdicionarContentor(){
+    void tc16_ecp2_testeAdicionarContentor(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
             Position pos1 = new Position(1, 1, 1);
+
             cont1.addItem(item1, pos1, Color.fuchsia);
             cont1.close();
 
-            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
-            Customer customer = new Customer("John Doe", add1, add1);
-
-            Person destination = new Person("Jane Doe", add2);
-
-            ShippingOrder ship = new ShippingOrder(customer, destination);
-
-            assertThrows(OrderException.class, ()-> ship.addContainer(cont1));
+            assertThrows(OrderException.class,()->ship.addContainer(cont1));
 
         } catch (ContainerException | PositionException e) {}
     }
 
     @Test
-    void tc23_ecp2_testeAdicionarContentor(){
+    void tc17_ecp2_testeAdicionarContentor(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
-            cont1.addItem(item1, pos1, Color.fuchsia);
-
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
             Customer customer = new Customer("John Doe", add1, add1);
-
             Person destination = new Person("Jane Doe", add2);
-
             ShippingOrder ship = new ShippingOrder(customer, destination);
+            Position pos1 = new Position(1, 1, 1);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
-            assertThrows(ContainerException.class, ()-> ship.addContainer(cont1));
+            assertThrows(ContainerException.class,()->ship.addContainer(cont1));
 
         } catch (ContainerException | PositionException | OrderException e) {}
     }
 
     @Test
-    void tc24_ecp3_testeAdicionarContentor(){
+    void tc18_ecp2_testeAdicionarContentor(){
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
             Position pos1 = new Position(1, 1, 1);
+
             cont1.addItem(item1, pos1, Color.fuchsia);
             cont1.close();
 
-            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
-            Customer customer = new Customer("John Doe", add1, add1);
-
-            Person destination = new Person("Jane Doe", add2);
-
-            ShippingOrder ship = new ShippingOrder(customer, destination);
             ship.setStatus(OrderStatus.IN_TREATMENT);
-
             ship.addContainer(cont1);
 
-            assertFalse(ship.addContainer(cont1));
+            assertThrows(ContainerException.class,()->ship.addContainer(cont1));
 
         } catch (ContainerException | PositionException | OrderException e) {}
     }
 
     @Test
-    void tc25_ecp4_testeAdicionarContentor() {
-        try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Container cont2 = new Container("cont1", 10, 10, 10, 3);
-
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
-
-            cont1.addItem(item1, pos1, Color.fuchsia);
-            cont2.addItem(item1, pos1, Color.maroon);
-            cont1.close();
-
-            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
-            Customer customer = new Customer("John Doe", add1, add1);
-
-            Person destination = new Person("Jane Doe", add2);
-
-            ShippingOrder ship = new ShippingOrder(customer, destination);
-            ship.setStatus(OrderStatus.IN_TREATMENT);
-
-            ship.addContainer(cont1);
-
-            assertThrows(ContainerException.class, () -> ship.addContainer(cont2));
-
-        } catch (ContainerException | PositionException | OrderException e) {}
-    }
-
-    @Test
-    void tc26_bva1_testeAdicionarContentor() {
+    void tc19_bva1_testeAdicionarContentor() {
             try {
                 Container cont1 = new Container("cont1", 20, 10, 10, 3);
-
                 Item item1 = new Item(2, 2, 2, "item1", "");
                 Position pos1 = new Position(1, 1, 1);
+                Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+                Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+                Customer customer = new Customer("John Doe", add1, add1);
+                Person destination = new Person("Jane Doe", add2);
+                ShippingOrder ship = new ShippingOrder(customer, destination);
 
                 cont1.addItem(item1, pos1, Color.fuchsia);
                 cont1.close();
 
-                Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-                Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-
-                Customer customer = new Customer("John Doe", add1, add1);
-
-                Person destination = new Person("Jane Doe", add2);
-
-                ShippingOrder ship = new ShippingOrder(customer, destination);
                 ship.setStatus(OrderStatus.IN_TREATMENT);
 
                 assertThrows(ContainerException.class, () -> ship.addContainer(null));
@@ -501,5 +326,329 @@ class TestCases {
     }
 
     //--------------------------------------------------------------------
+    @Test
+    void tc20_ecp1_testeRemoverContentor(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertTrue(ship.removeContainer(cont1));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc21_ecp2_testeRemoverContentor(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.addContainer(cont1);
+
+            assertThrows(OrderException.class, ()->ship.removeContainer(cont1));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc22_ecp2_testeRemoverContentor(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertFalse(ship.removeContainer(cont1));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc23_bva1_testeRemoverContentor(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertThrows(ContainerException.class, ()->ship.removeContainer(null));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Test
+    void tc24_ecp1_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            assertDoesNotThrow(()->ship.setStatus(OrderStatus.IN_TREATMENT));
+
+        } catch (ContainerException | PositionException  e) {}
+    }
+
+    @Test
+    void tc25_ecp2_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertThrows(OrderException.class, ()-> ship.setStatus(OrderStatus.IN_TREATMENT));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc26_ecp3_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertDoesNotThrow(()->ship.setStatus(OrderStatus.CLOSED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc27_ecp4_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+            ship.setStatus(OrderStatus.CLOSED);
+
+            assertThrows(OrderException.class, ()-> ship.setStatus(OrderStatus.CLOSED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc28_ecp4_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertThrows(OrderException.class, ()-> ship.setStatus(OrderStatus.CLOSED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc29_ecp5_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+            ship.setStatus(OrderStatus.CLOSED);
+
+            assertDoesNotThrow(()-> ship.setStatus(OrderStatus.SHIPPED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc30_ecp6_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertThrows(OrderException.class, ()-> ship.setStatus(OrderStatus.SHIPPED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc31_bva1_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertThrows(Exception.class, ()-> ship.setStatus(null));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc32_bva2_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertThrows(OrderException.class, ()-> ship.setStatus(OrderStatus.CLOSED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+    @Test
+    void tc33_bva2_testeAlterarEstadoEncomenda(){
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Position pos1 = new Position(1, 1, 1);
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+            ship.addContainer(cont1);
+
+            assertDoesNotThrow(()-> ship.setStatus(OrderStatus.CLOSED));
+
+        } catch (ContainerException | PositionException | OrderException e) {}
+    }
+
+
+
+
+
+   
+
 }
 
