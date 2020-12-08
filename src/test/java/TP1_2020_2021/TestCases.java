@@ -8,25 +8,25 @@ import order.exceptions.ContainerException;
 import order.exceptions.OrderException;
 import order.exceptions.PositionException;
 import order.packing.Color;
-import order.packing.IContainer;
 import order.shippingorder.ShippingOrder;
 import org.junit.jupiter.api.Test;
 import packing.Container;
 import packing.Item;
 import packing.Position;
-import shippingorder.IShippingOrder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestCases {
 
-    
+    /**
+     * Teste da funcionalidade adicionar item, numa situação válida
+     */
     @Test
     void tc1_ecp1_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10);
+        Item item1 = new Item(5, 2, 2, "item1", "");
 
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10);
-            Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
             float volume = cont1.getOccupiedVolume();
@@ -35,73 +35,88 @@ class TestCases {
             assertEquals(volume + 5*2*2, cont1.getOccupiedVolume());
             assertNotNull(cont1.getItem("item1"));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
+
     }
 
+    /**
+     * Teste da funcionalidade adicionar item (item já existe no contentor e o contentor não está fechado)
+     */
     @Test
     void tc2_ecp2_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10);
+        Item item1 = new Item(5, 2, 2, "item1", "");
+
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10);
-            Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
             cont1.addItem(item1, pos1, Color.black);
 
             assertFalse(cont1.addItem(item1, pos1, Color.aqua));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar item (item não existe no contentor e o contentor está fechado)
+     */
     @Test
     void tc3_ecp3_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10);
+        Item item1 = new Item(5, 2, 2, "item1", "");
+
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10);
-            Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
             cont1.close();
 
-            assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, Color.aqua), "Can't add item, container is closed!");
+            assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, Color.aqua));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar item com os 3 parâmetros nulos
+     */
     @Test
     void tc4_bva1_testeAdicionarItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 4);
-
         assertThrows(ContainerException.class, () -> cont1.addItem(null, null, null));
     }
 
+    /**
+     * Teste da funcionalidade adicionar item com parâmetros nulos exceto o item
+     */
     @Test
     void tc5_bva2_testeAdicionarItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 4);
         Item item1 = new Item(2, 3, 4, "item1", "");
-
         assertThrows(ContainerException.class, () -> cont1.addItem(item1, null, null));
     }
 
+    /**
+     * Teste da funcionalidade adicionar item com um parâmetro null (color)
+     */
     @Test
     void tc6_bva3_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 4);
+        Item item1 = new Item(2, 3, 4, "item1", "");
+
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 4);
-            Item item1 = new Item(2, 3, 4, "item1", "");
             Position pos1 = new Position(1, 1, 1);
-
             assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, null));
-
-        } catch (PositionException e) {
-        }
+        } catch (PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar um item numa coleção vazia.
+     */
     @Test
     void tc7_bva4_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 4);
+        Item item1 = new Item(5, 2, 2, "item1", "");
+
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 4);
-            Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
             float volume = cont1.getOccupiedVolume();
@@ -110,18 +125,20 @@ class TestCases {
             assertEquals(volume + 5*2*2, cont1.getOccupiedVolume());
             assertNotNull(cont1.getItem("item1"));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar um item numa coleção cheia.
+     */
     @Test
     void tc8_bva5_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 2, 2, "item1", "");
+        Item item2 = new Item(2, 2, 2, "item2", "");
+        Item item3 = new Item(5, 3, 6, "item3", "");
+        Item item4 = new Item(4, 1, 2, "item4", "");
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Item item2 = new Item(2, 2, 2, "item2", "");
-            Item item3 = new Item(5, 3, 6, "item3", "");
-            Item item4 = new Item(4, 1, 2, "item4", "");
             Position pos1 = new Position(1, 1, 1);
             Position pos2 = new Position(2, 2, 2);
             Position pos3 = new Position(3, 3, 3);
@@ -136,17 +153,20 @@ class TestCases {
             assertEquals(volume + 4*1*2, cont1.getOccupiedVolume());
             assertNotNull(cont1.getItem("item4"));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar um item numa coleção semi-preenchida.
+     */
     @Test
     void tc9_bva6_testeAdicionarItem() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 2, 2, "item1", "");
+        Item item2 = new Item(2, 2, 2, "item2", "");
+        Item item3 = new Item(5, 3, 6, "item3", "");
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Item item2 = new Item(2, 2, 2, "item2", "");
-            Item item3 = new Item(5, 3, 6, "item3", "");
+
             Position pos1 = new Position(1, 1, 1);
             Position pos2 = new Position(2, 2, 2);
             Position pos3 = new Position(3, 3, 3);
@@ -159,12 +179,14 @@ class TestCases {
             assertEquals(volume + 5*3*6, cont1.getOccupiedVolume());
             assertNotNull(cont1.getItem("item3"));
 
-        } catch (PositionException | ContainerException e) {
-        }
+        } catch (PositionException | ContainerException e) {}
     }
 
     //------------------------------------------------------------------
 
+    /**
+     * Teste da funcionalidade remover item (contentor não está fechado e o item existe no contentor)
+     */
     @Test
     void tc10_ecp1_testeRemoverItem() {
         try {
@@ -183,6 +205,9 @@ class TestCases {
         }
     }
 
+    /**
+     * Teste da funcionalidade remover item (contentor está fechado e o item existe no contentor)
+     */
     @Test
     void tc11_ecp2_testeRemoverItem() {
         try {
@@ -199,6 +224,9 @@ class TestCases {
         }
     }
 
+    /**
+     * Teste da funcionalidade remover item (contentor não está fechado e o item não existe no contentor)
+     */
     @Test
     void tc12_ecp3_testeRemoverItem() {
         try {
@@ -211,6 +239,9 @@ class TestCases {
         }
     }
 
+    /**
+     * Teste da funcionalidade remover item com parâmetro null
+     */
     @Test
     void tc13_bva1_testeRemoverItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -218,6 +249,9 @@ class TestCases {
         assertThrows(ContainerException.class, () -> cont1.removeItem(null));
     }
 
+    /**
+     * Teste da funcionalidade remover item de uma coleção com apenas um item
+     */
     @Test
     void tc14_bva2_testeRemoverItem() {
         try {
@@ -236,6 +270,9 @@ class TestCases {
         }
     }
 
+    /**
+     * Teste da funcionalidade remover item de uma coleção cheia
+     */
     @Test
     void tc15_bva3_testeRemoverItem() {
         try {
@@ -260,6 +297,9 @@ class TestCases {
         }
     }
 
+    /**
+     * Teste da funcionalidade remover item de uma coleção semi-preenchida
+     */
     @Test
     void tc16_bva4_testeRemoverItem() {
         try {
@@ -284,6 +324,9 @@ class TestCases {
 
     //------------------------------------------------------------------
 
+    /**
+     * Teste da funcionalidade adicionar contentor numa situação válida
+     */
     @Test
     void tc17_ecp1_testeAdicionarContentor() {
         try {
@@ -304,10 +347,12 @@ class TestCases {
             assertTrue(ship.addContainer(cont1));
             assertTrue(ship.existsContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar contentor numa encomenda com estado != IN_TREATMENT
+     */
     @Test
     void tc18_ecp2_testeAdicionarContentor() {
         try {
@@ -325,10 +370,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.addContainer(cont1));
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar contentor que não está fechado
+     */
     @Test
     void tc19_ecp3_testeAdicionarContentor() {
         try {
@@ -347,10 +394,12 @@ class TestCases {
 
             assertThrows(ContainerException.class, () -> ship.addContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar contentor que já existe na encomenda
+     */
     @Test
     void tc20_ecp4_testeAdicionarContentor() {
         try {
@@ -371,10 +420,12 @@ class TestCases {
 
             assertFalse(ship.addContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar contentor com parâmetro null
+     */
     @Test
     void tc21_bva1_testeAdicionarContentor() {
         try {
@@ -388,10 +439,12 @@ class TestCases {
 
             assertThrows(ContainerException.class, () -> ship.addContainer(null));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade adicionar contentor numa coleção vazia
+     */
     @Test
     void tc22_bva2_testeAdicionarContentor() {
         try {
@@ -418,6 +471,9 @@ class TestCases {
 
     //------------------------------------------------------------------
 
+    /**
+     * Teste da funcionalidade remover contentor numa situação válida
+     */
     @Test
     void tc23_ecp1_testeRemoverContentor() {
         try {
@@ -439,10 +495,12 @@ class TestCases {
             assertTrue(ship.removeContainer(cont1));
             assertFalse(ship.existsContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade remover contentor numa encomenda com estado != IN_TREATMENT
+     */
     @Test
     void tc24_ecp2_testeRemoverContentor() {
         try {
@@ -464,10 +522,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.removeContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade remover contentor que não existe na encomenda
+     */
     @Test
     void tc25_ecp3_testeRemoverContentor() {
         try {
@@ -487,10 +547,12 @@ class TestCases {
 
             assertFalse(ship.removeContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade remover contentor com parâmetro null
+     */
     @Test
     void tc26_bva1_testeRemoverContentor() {
         try {
@@ -504,10 +566,12 @@ class TestCases {
 
             assertThrows(ContainerException.class, () -> ship.removeContainer(null));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade remover contentor de uma coleção com apenas um contentor
+     */
     @Test
     void tc27_bva2_testeRemoverContentor() {
         try {
@@ -529,12 +593,14 @@ class TestCases {
             assertTrue(ship.removeContainer(cont1));
             assertFalse(ship.existsContainer(cont1));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
     //------------------------------------------------------------------
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para IN_TREATMENT numa situação válida
+     */
     @Test
     void tc28_ecp1_testeAlterarEstadoEncomenda() {
         Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
@@ -546,6 +612,9 @@ class TestCases {
         assertDoesNotThrow(() -> ship.setStatus(OrderStatus.IN_TREATMENT));
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para IN_TREATMENT numa situação inválida
+     */
     @Test
     void tc29_ecp2_testeAlterarEstadoEncomenda() {
         try {
@@ -559,10 +628,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.IN_TREATMENT));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para CLOSED numa situação válida
+     */
     @Test
     void tc30_ecp3_testeAlterarEstadoEncomenda() {
         try {
@@ -583,10 +654,12 @@ class TestCases {
 
             assertDoesNotThrow(() -> ship.setStatus(OrderStatus.CLOSED));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para CLOSED numa situação inválida
+     */
     @Test
     void tc31_ecp4_testeAlterarEstadoEncomenda() {
         try {
@@ -608,10 +681,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.CLOSED));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para CLOSED numa situação inválida (não existem contentores)
+     */
     @Test
     void tc32_ecp5_testeAlterarEstadoEncomenda() {
         try {
@@ -625,10 +700,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.CLOSED));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para SHIPED numa situação válida
+     */
     @Test
     void tc33_ecp6_testeAlterarEstadoEncomenda() {
         try {
@@ -650,10 +727,12 @@ class TestCases {
 
             assertDoesNotThrow(() -> ship.setStatus(OrderStatus.SHIPPED));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para SHIPED numa situação inválida
+     */
     @Test
     void tc34_ecp7_testeAlterarEstadoEncomenda() {
         try {
@@ -667,10 +746,12 @@ class TestCases {
 
             assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.SHIPPED));
 
-        } catch (ContainerException | PositionException | OrderException e) {
-        }
+        } catch (ContainerException | PositionException | OrderException e) {}
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda com parâmetro null
+     */
     @Test
     void tc35_bva1_testeAlterarEstadoEncomenda() {
         Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
@@ -679,9 +760,12 @@ class TestCases {
         Person destination = new Person("Jane Doe", add2);
         ShippingOrder ship = new ShippingOrder(customer, destination);
 
-        assertThrows(Exception.class, () -> ship.setStatus(null));
+        assertThrows(OrderException.class, ()-> ship.setStatus(null));
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para CLOSED com o nº de contentores = 0
+     */
     @Test
     void tc36_bva2_testeAlterarEstadoEncomenda() {
         try {
@@ -693,12 +777,15 @@ class TestCases {
 
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
-            assertThrows(Exception.class, () -> ship.setStatus(OrderStatus.CLOSED));
+            assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.CLOSED));
 
         } catch (ContainerException | PositionException | OrderException e) {
         }
     }
 
+    /**
+     * Teste da funcionalidade alterar estado da encomenda para CLOSED com o nº de contentores = 1
+     */
     @Test
     void tc37_bva3_testeAlterarEstadoEncomenda() {
         try {
@@ -725,6 +812,9 @@ class TestCases {
 
     //------------------------------------------------------------------
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc38_ecp1_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -748,6 +838,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc39_ecp2_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -771,6 +864,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc40_ecp3_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -794,6 +890,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc41_ecp4_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -817,6 +916,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc42_ecp5_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -840,6 +942,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida
+     */
     @Test
     void tc43_ecp6_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -863,6 +968,9 @@ class TestCases {
         assertDoesNotThrow(() -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação (overflow volume)
+     */
     @Test
     void tc44_ecp7_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -886,6 +994,9 @@ class TestCases {
         assertThrows(ContainerException.class, () -> cont1.validate());
     }
 
+    /**
+     * Teste da funcionalidade validar contentor com um item fora do contentor
+     */
     @Test
     void tc45_ecp8_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -900,10 +1011,12 @@ class TestCases {
 
             assertThrows(PositionException.class, () -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor com um item fora do contentor
+     */
     @Test
     void tc46_ecp9_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -918,10 +1031,12 @@ class TestCases {
 
             assertThrows(PositionException.class, () -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor com um item fora do contentor
+     */
     @Test
     void tc47_ecp10_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -936,10 +1051,12 @@ class TestCases {
 
             assertThrows(PositionException.class, () -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor com items sobrepostos (overlapping)
+     */
     @Test
     void tc48_ecp11_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -957,10 +1074,13 @@ class TestCases {
 
             assertThrows(PositionException.class, () -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc49_bva1_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -974,10 +1094,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc50_bva2_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -991,10 +1114,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc51_bva3_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1008,10 +1134,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc52_bva4_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1025,10 +1154,13 @@ class TestCases {
 
             assertThrows(PositionException.class,() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc53_bva5_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1042,10 +1174,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida mas
+     * com items nos limites do contentor
+     */
     @Test
     void tc54_bva6_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1059,11 +1194,13 @@ class TestCases {
 
             assertThrows(PositionException.class,() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
-
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc55_bva7_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1081,10 +1218,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc56_bva8_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1102,10 +1242,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc57_bva9_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1123,10 +1266,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc58_bva10_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1144,10 +1290,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc59_bva11_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1165,10 +1314,13 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor numa situação válida com items
+     * a partilhar a mesma face (sem espaço entre eles)
+     */
     @Test
     void tc60_bva12_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1186,18 +1338,21 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor (volume total de itens MIN = 0)
+     */
     @Test
     void tc61_bva13_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
-
         assertDoesNotThrow(() -> cont1.validate());
-
     }
 
+    /**
+     * Teste da funcionalidade validar contentor (volume total de itens MIN + 1 = 1)
+     */
     @Test
     void tc62_bva14_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1211,10 +1366,12 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor (volume total de itens MAX - 1 = 3)
+     */
     @Test
     void tc63_bva15_testeValidarContentor() {
         Container cont1 = new Container("cont1", 4, 1, 1, 3);
@@ -1232,10 +1389,12 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor (volume total de itens MAX = 2000)
+     */
     @Test
     void tc64_bva16_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1249,10 +1408,12 @@ class TestCases {
 
             assertDoesNotThrow(() -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
 
+    /**
+     * Teste da funcionalidade validar contentor (volume total de itens MAX + 1 = 2001)
+     */
     @Test
     void tc65_bva17_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
@@ -1270,10 +1431,8 @@ class TestCases {
 
             assertThrows(ContainerException.class, () -> cont1.validate());
 
-        } catch (ContainerException | PositionException e) {
-        }
+        } catch (ContainerException | PositionException e) {}
     }
-
 
 }
 
