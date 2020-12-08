@@ -8,6 +8,7 @@ import order.exceptions.ContainerException;
 import order.exceptions.OrderException;
 import order.exceptions.PositionException;
 import order.packing.Color;
+import order.packing.IContainer;
 import order.shippingorder.ShippingOrder;
 import org.junit.jupiter.api.Test;
 import packing.Container;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestCases {
 
+    
     @Test
     void tc1_ecp1_testeAdicionarItem() {
 
@@ -26,7 +28,13 @@ class TestCases {
             Container cont1 = new Container("cont1", 20, 10, 10);
             Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
+
+            float volume = cont1.getOccupiedVolume();
+
             assertTrue(cont1.addItem(item1, pos1, Color.aqua));
+            assertEquals(volume + 5*2*2, cont1.getOccupiedVolume());
+            assertNotNull(cont1.getItem("item1"));
+
         } catch (PositionException | ContainerException e) {
         }
     }
@@ -47,7 +55,7 @@ class TestCases {
     }
 
     @Test
-    void tc3_ecp2_testeAdicionarItem() {
+    void tc3_ecp3_testeAdicionarItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10);
             Item item1 = new Item(5, 2, 2, "item1", "");
@@ -64,6 +72,7 @@ class TestCases {
     @Test
     void tc4_bva1_testeAdicionarItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 4);
+
         assertThrows(ContainerException.class, () -> cont1.addItem(null, null, null));
     }
 
@@ -71,6 +80,7 @@ class TestCases {
     void tc5_bva2_testeAdicionarItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 4);
         Item item1 = new Item(2, 3, 4, "item1", "");
+
         assertThrows(ContainerException.class, () -> cont1.addItem(item1, null, null));
     }
 
@@ -80,7 +90,9 @@ class TestCases {
             Container cont1 = new Container("cont1", 20, 10, 10, 4);
             Item item1 = new Item(2, 3, 4, "item1", "");
             Position pos1 = new Position(1, 1, 1);
+
             assertThrows(ContainerException.class, () -> cont1.addItem(item1, pos1, null));
+
         } catch (PositionException e) {
         }
     }
@@ -92,7 +104,11 @@ class TestCases {
             Item item1 = new Item(5, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
+            float volume = cont1.getOccupiedVolume();
+
             assertTrue(cont1.addItem(item1, pos1, Color.black));
+            assertEquals(volume + 5*2*2, cont1.getOccupiedVolume());
+            assertNotNull(cont1.getItem("item1"));
 
         } catch (PositionException | ContainerException e) {
         }
@@ -110,11 +126,38 @@ class TestCases {
             Position pos2 = new Position(2, 2, 2);
             Position pos3 = new Position(3, 3, 3);
             Position pos4 = new Position(4, 4, 4);
+
             cont1.addItem(item1, pos1, Color.aqua);
             cont1.addItem(item2, pos2, Color.green);
             cont1.addItem(item3, pos3, Color.black);
+            float volume = cont1.getOccupiedVolume();
 
             assertTrue(cont1.addItem(item4, pos4, Color.gray));
+            assertEquals(volume + 4*1*2, cont1.getOccupiedVolume());
+            assertNotNull(cont1.getItem("item4"));
+
+        } catch (PositionException | ContainerException e) {
+        }
+    }
+
+    @Test
+    void tc9_bva6_testeAdicionarItem() {
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Item item2 = new Item(2, 2, 2, "item2", "");
+            Item item3 = new Item(5, 3, 6, "item3", "");
+            Position pos1 = new Position(1, 1, 1);
+            Position pos2 = new Position(2, 2, 2);
+            Position pos3 = new Position(3, 3, 3);
+
+            cont1.addItem(item1, pos1, Color.aqua);
+            cont1.addItem(item2, pos2, Color.green);
+            float volume = cont1.getOccupiedVolume();
+
+            assertTrue(cont1.addItem(item3, pos3, Color.gray));
+            assertEquals(volume + 5*3*6, cont1.getOccupiedVolume());
+            assertNotNull(cont1.getItem("item3"));
 
         } catch (PositionException | ContainerException e) {
         }
@@ -123,22 +166,25 @@ class TestCases {
     //------------------------------------------------------------------
 
     @Test
-    void tc9_ecp1_testeRemoverItem() {
+    void tc10_ecp1_testeRemoverItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
+            Item item1 = new Item(2, 2, 2, "item1", "A");
             Position pos1 = new Position(1, 1, 1);
 
             cont1.addItem(item1, pos1, Color.aqua);
+            float volume = cont1.getOccupiedVolume();
 
             assertTrue(cont1.removeItem(item1));
+            assertEquals(volume - 2*2*2, cont1.getOccupiedVolume());
+            assertNull(cont1.getItem("item1"));
 
         } catch (PositionException | ContainerException e) {
         }
     }
 
     @Test
-    void tc10_ecp2_testeRemoverItem() {
+    void tc11_ecp2_testeRemoverItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -154,7 +200,7 @@ class TestCases {
     }
 
     @Test
-    void tc11_ecp2_testeRemoverItem() {
+    void tc12_ecp3_testeRemoverItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -166,27 +212,32 @@ class TestCases {
     }
 
     @Test
-    void tc12_bva1_testeRemoverItem() {
+    void tc13_bva1_testeRemoverItem() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
+
         assertThrows(ContainerException.class, () -> cont1.removeItem(null));
     }
 
     @Test
-    void tc13_bva2_testeRemoverItem() {
+    void tc14_bva2_testeRemoverItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
             Position pos1 = new Position(1, 1, 1);
 
             cont1.addItem(item1, pos1, Color.fuchsia);
+            float volume = cont1.getOccupiedVolume();
+
             assertTrue(cont1.removeItem(item1));
+            assertEquals(volume - 2*2*2, cont1.getOccupiedVolume());
+            assertNull(cont1.getItem("item1"));
 
         } catch (PositionException | ContainerException e) {
         }
     }
 
     @Test
-    void tc14_bva3_testeRemoverItem() {
+    void tc15_bva3_testeRemoverItem() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -199,15 +250,42 @@ class TestCases {
             cont1.addItem(item1, pos1, Color.fuchsia);
             cont1.addItem(item2, pos2, Color.fuchsia);
             cont1.addItem(item3, pos3, Color.fuchsia);
+            float volume = cont1.getOccupiedVolume();
 
             assertTrue(cont1.removeItem(item1));
+            assertEquals(volume - 2*2*2, cont1.getOccupiedVolume());
+            assertNull(cont1.getItem("item1"));
 
         } catch (PositionException | ContainerException e) {
         }
     }
 
     @Test
-    void tc15_ecp1_testeAdicionarContentor() {
+    void tc16_bva4_testeRemoverItem() {
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Item item2 = new Item(3, 3, 3, "item2", "");
+            Position pos1 = new Position(1, 1, 1);
+            Position pos2 = new Position(1, 2, 1);
+
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.addItem(item2, pos2, Color.fuchsia);
+            float volume = cont1.getOccupiedVolume();
+
+            assertTrue(cont1.removeItem(item1));
+            assertEquals(volume - 2*2*2, cont1.getOccupiedVolume());
+            assertNull(cont1.getItem("item1"));
+
+        } catch (PositionException | ContainerException e) {
+        }
+    }
+
+    //------------------------------------------------------------------
+
+    @Test
+    void tc17_ecp1_testeAdicionarContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -224,13 +302,14 @@ class TestCases {
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
             assertTrue(ship.addContainer(cont1));
+            assertTrue(ship.existsContainer(cont1));
 
         } catch (ContainerException | PositionException | OrderException e) {
         }
     }
 
     @Test
-    void tc16_ecp2_testeAdicionarContentor() {
+    void tc18_ecp2_testeAdicionarContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -251,7 +330,7 @@ class TestCases {
     }
 
     @Test
-    void tc17_ecp2_testeAdicionarContentor() {
+    void tc19_ecp3_testeAdicionarContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -273,7 +352,7 @@ class TestCases {
     }
 
     @Test
-    void tc18_ecp2_testeAdicionarContentor() {
+    void tc20_ecp4_testeAdicionarContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -297,7 +376,7 @@ class TestCases {
     }
 
     @Test
-    void tc19_bva1_testeAdicionarContentor() {
+    void tc21_bva1_testeAdicionarContentor() {
         try {
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
@@ -313,9 +392,34 @@ class TestCases {
         }
     }
 
-    //--------------------------------------------------------------------
     @Test
-    void tc20_ecp1_testeRemoverContentor() {
+    void tc22_bva2_testeAdicionarContentor() {
+        try {
+            Container cont1 = new Container("cont1", 20, 10, 10, 3);
+            Item item1 = new Item(2, 2, 2, "item1", "");
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+            Position pos1 = new Position(1, 1, 1);
+
+            cont1.addItem(item1, pos1, Color.fuchsia);
+            cont1.close();
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertTrue(ship.addContainer(cont1));
+            assertTrue(ship.existsContainer(cont1));
+
+        } catch (ContainerException | PositionException | OrderException e) {
+        }
+    }
+
+    //------------------------------------------------------------------
+
+    @Test
+    void tc23_ecp1_testeRemoverContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -333,13 +437,14 @@ class TestCases {
             ship.addContainer(cont1);
 
             assertTrue(ship.removeContainer(cont1));
+            assertFalse(ship.existsContainer(cont1));
 
         } catch (ContainerException | PositionException | OrderException e) {
         }
     }
 
     @Test
-    void tc21_ecp2_testeRemoverContentor() {
+    void tc24_ecp2_testeRemoverContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -353,7 +458,9 @@ class TestCases {
             cont1.addItem(item1, pos1, Color.fuchsia);
             cont1.close();
 
+            ship.setStatus(OrderStatus.IN_TREATMENT);
             ship.addContainer(cont1);
+            ship.setStatus(OrderStatus.CLOSED);
 
             assertThrows(OrderException.class, () -> ship.removeContainer(cont1));
 
@@ -362,7 +469,7 @@ class TestCases {
     }
 
     @Test
-    void tc22_ecp2_testeRemoverContentor() {
+    void tc25_ecp3_testeRemoverContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -385,7 +492,24 @@ class TestCases {
     }
 
     @Test
-    void tc23_bva1_testeRemoverContentor() {
+    void tc26_bva1_testeRemoverContentor() {
+        try {
+            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+            Customer customer = new Customer("John Doe", add1, add1);
+            Person destination = new Person("Jane Doe", add2);
+            ShippingOrder ship = new ShippingOrder(customer, destination);
+
+            ship.setStatus(OrderStatus.IN_TREATMENT);
+
+            assertThrows(ContainerException.class, () -> ship.removeContainer(null));
+
+        } catch (ContainerException | PositionException | OrderException e) {
+        }
+    }
+
+    @Test
+    void tc27_bva2_testeRemoverContentor() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -402,49 +526,34 @@ class TestCases {
             ship.setStatus(OrderStatus.IN_TREATMENT);
             ship.addContainer(cont1);
 
-            assertThrows(ContainerException.class, () -> ship.removeContainer(null));
+            assertTrue(ship.removeContainer(cont1));
+            assertFalse(ship.existsContainer(cont1));
 
         } catch (ContainerException | PositionException | OrderException e) {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------
 
     @Test
-    void tc24_ecp1_testeAlterarEstadoEncomenda() {
-        try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
-            Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
-            Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
-            Customer customer = new Customer("John Doe", add1, add1);
-            Person destination = new Person("Jane Doe", add2);
-            ShippingOrder ship = new ShippingOrder(customer, destination);
+    void tc28_ecp1_testeAlterarEstadoEncomenda() {
+        Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
+        Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
+        Customer customer = new Customer("John Doe", add1, add1);
+        Person destination = new Person("Jane Doe", add2);
+        ShippingOrder ship = new ShippingOrder(customer, destination);
 
-            cont1.addItem(item1, pos1, Color.fuchsia);
-            cont1.close();
-
-            assertDoesNotThrow(() -> ship.setStatus(OrderStatus.IN_TREATMENT));
-
-        } catch (ContainerException | PositionException e) {
-        }
+        assertDoesNotThrow(() -> ship.setStatus(OrderStatus.IN_TREATMENT));
     }
 
     @Test
-    void tc25_ecp2_testeAlterarEstadoEncomenda() {
+    void tc29_ecp2_testeAlterarEstadoEncomenda() {
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
             Customer customer = new Customer("John Doe", add1, add1);
             Person destination = new Person("Jane Doe", add2);
             ShippingOrder ship = new ShippingOrder(customer, destination);
-
-            cont1.addItem(item1, pos1, Color.fuchsia);
-            cont1.close();
 
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
@@ -455,7 +564,7 @@ class TestCases {
     }
 
     @Test
-    void tc26_ecp3_testeAlterarEstadoEncomenda() {
+    void tc30_ecp3_testeAlterarEstadoEncomenda() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -479,7 +588,7 @@ class TestCases {
     }
 
     @Test
-    void tc27_ecp4_testeAlterarEstadoEncomenda() {
+    void tc31_ecp4_testeAlterarEstadoEncomenda() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -504,19 +613,13 @@ class TestCases {
     }
 
     @Test
-    void tc28_ecp4_testeAlterarEstadoEncomenda() {
+    void tc32_ecp5_testeAlterarEstadoEncomenda() {
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
             Customer customer = new Customer("John Doe", add1, add1);
             Person destination = new Person("Jane Doe", add2);
             ShippingOrder ship = new ShippingOrder(customer, destination);
-
-            cont1.addItem(item1, pos1, Color.fuchsia);
-            cont1.close();
 
             ship.setStatus(OrderStatus.IN_TREATMENT);
 
@@ -527,7 +630,7 @@ class TestCases {
     }
 
     @Test
-    void tc29_ecp5_testeAlterarEstadoEncomenda() {
+    void tc33_ecp6_testeAlterarEstadoEncomenda() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -552,22 +655,15 @@ class TestCases {
     }
 
     @Test
-    void tc30_ecp6_testeAlterarEstadoEncomenda() {
+    void tc34_ecp7_testeAlterarEstadoEncomenda() {
         try {
-            Container cont1 = new Container("cont1", 20, 10, 10, 3);
-            Item item1 = new Item(2, 2, 2, "item1", "");
-            Position pos1 = new Position(1, 1, 1);
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
             Customer customer = new Customer("John Doe", add1, add1);
             Person destination = new Person("Jane Doe", add2);
             ShippingOrder ship = new ShippingOrder(customer, destination);
 
-            cont1.addItem(item1, pos1, Color.fuchsia);
-            cont1.close();
-
             ship.setStatus(OrderStatus.IN_TREATMENT);
-            ship.addContainer(cont1);
 
             assertThrows(OrderException.class, () -> ship.setStatus(OrderStatus.SHIPPED));
 
@@ -576,17 +672,18 @@ class TestCases {
     }
 
     @Test
-    void tc31_bva1_testeAlterarEstadoEncomenda() {
+    void tc35_bva1_testeAlterarEstadoEncomenda() {
         Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
         Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
         Customer customer = new Customer("John Doe", add1, add1);
         Person destination = new Person("Jane Doe", add2);
         ShippingOrder ship = new ShippingOrder(customer, destination);
+
         assertThrows(Exception.class, () -> ship.setStatus(null));
     }
 
     @Test
-    void tc32_bva2_testeAlterarEstadoEncomenda() {
+    void tc36_bva2_testeAlterarEstadoEncomenda() {
         try {
             Address add1 = new Address("street A1", 1, "city A1", "state A1", "country A1");
             Address add2 = new Address("street A2", 2, "city A2", "state A2", "country A2");
@@ -603,7 +700,7 @@ class TestCases {
     }
 
     @Test
-    void tc33_bva2_testeAlterarEstadoEncomenda() {
+    void tc37_bva3_testeAlterarEstadoEncomenda() {
         try {
             Container cont1 = new Container("cont1", 20, 10, 10, 3);
             Item item1 = new Item(2, 2, 2, "item1", "");
@@ -615,7 +712,6 @@ class TestCases {
             ShippingOrder ship = new ShippingOrder(customer, destination);
 
             cont1.addItem(item1, pos1, Color.fuchsia);
-
             cont1.close();
 
             ship.setStatus(OrderStatus.IN_TREATMENT);
@@ -627,8 +723,10 @@ class TestCases {
         }
     }
 
+    //------------------------------------------------------------------
+
     @Test
-    void tc34_ecp1_testeValidarContentor() {
+    void tc38_ecp1_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
         Item item1 = new Item(1, 1, 1, "item1", "");
         Item item2 = new Item(1, 1, 1, "item2", "");
@@ -637,7 +735,7 @@ class TestCases {
         Position pos2 = null;
         try {
             pos1 = new Position(0, 0, 0);
-            pos2 = new Position(0, 1, 0);
+            pos2 = new Position(0, 1, 2);
         } catch (PositionException e) {
         }
 
@@ -651,16 +749,131 @@ class TestCases {
     }
 
     @Test
-    void tc35_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 10, 5, 5, 3);
-        Item item1 = new Item(6, 5, 5, "item1", "");
-        Item item2 = new Item(5, 5, 5, "item2", "");
+    void tc39_ecp2_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+
+        Position pos1 = null;
+        Position pos2 = null;
+        try {
+            pos1 = new Position(0, 0, 4);
+            pos2 = new Position(0, 1, 2);
+        } catch (PositionException e) {
+        }
+
+        try {
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+        } catch (ContainerException e) {
+        }
+
+        assertDoesNotThrow(() -> cont1.validate());
+    }
+
+    @Test
+    void tc40_ecp3_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+
+        Position pos1 = null;
+        Position pos2 = null;
+        try {
+            pos1 = new Position(0, 0, 4);
+            pos2 = new Position(2, 1, 2);
+        } catch (PositionException e) {
+        }
+
+        try {
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+        } catch (ContainerException e) {
+        }
+
+        assertDoesNotThrow(() -> cont1.validate());
+    }
+
+    @Test
+    void tc41_ecp4_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+
+        Position pos1 = null;
+        Position pos2 = null;
+        try {
+            pos1 = new Position(5, 0, 4);
+            pos2 = new Position(2, 1, 2);
+        } catch (PositionException e) {
+        }
+
+        try {
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+        } catch (ContainerException e) {
+        }
+
+        assertDoesNotThrow(() -> cont1.validate());
+    }
+
+    @Test
+    void tc42_ecp5_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+
+        Position pos1 = null;
+        Position pos2 = null;
+        try {
+            pos1 = new Position(0, 0, 4);
+            pos2 = new Position(0, 2, 2);
+        } catch (PositionException e) {
+        }
+
+        try {
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+        } catch (ContainerException e) {
+        }
+
+        assertDoesNotThrow(() -> cont1.validate());
+    }
+
+    @Test
+    void tc43_ecp6_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+
+        Position pos1 = null;
+        Position pos2 = null;
+        try {
+            pos1 = new Position(0, 6, 4);
+            pos2 = new Position(0, 2, 2);
+        } catch (PositionException e) {
+        }
+
+        try {
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+        } catch (ContainerException e) {
+        }
+
+        assertDoesNotThrow(() -> cont1.validate());
+    }
+
+    @Test
+    void tc44_ecp7_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(10, 10, 10, "item1", "");
+        Item item2 = new Item(10, 10, 12, "item2", "");
 
         Position pos1 = null;
         Position pos2 = null;
         try {
             pos1 = new Position(0, 0, 0);
-            pos2 = new Position(0, 1, 0);
+            pos2 = new Position(10, 0, 0);
         } catch (PositionException e) {
         }
 
@@ -674,214 +887,394 @@ class TestCases {
     }
 
     @Test
-    void tc36_ecp2_testeValidarContentor() {
+    void tc45_ecp8_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(1, 1, 1, "item1", "");
-        Item item2 = new Item(1, 1, 1, "item2", "");
+        Item item1 = new Item(12, 1, 1, "item1", "");
 
         Position pos1 = null;
-        Position pos2 = null;
+
         try {
-            pos1 = new Position(-2, 0, 2);
-            pos2 = new Position(0, 1, 0);
+            pos1 = new Position(10, 0, 0);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertThrows(PositionException.class, () -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc46_ecp9_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(10, 0, 10);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertThrows(PositionException.class, () -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc47_ecp10_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(10, 12, 1);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertThrows(PositionException.class, () -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc48_ecp11_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 3);
+            pos2 = new Position(8, 2, 1);
+
             cont1.addItem(item1, pos1, Color.black);
             cont1.addItem(item2, pos2, Color.black);
 
             assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
 
+        } catch (ContainerException | PositionException e) {
+        }
     }
 
     @Test
-    void tc37_ecp2_testeValidarContentor() {
+    void tc49_bva1_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
         Item item1 = new Item(1, 1, 1, "item1", "");
-        Item item2 = new Item(1, 1, 1, "item2", "");
-
         Position pos1 = null;
-        Position pos2 = null;
-        try {
-            pos1 = new Position(1, -1, 2);
-            pos2 = new Position(3, 1, 0);
-            cont1.addItem(item1, pos1, Color.black);
-            cont1.addItem(item2, pos2, Color.black);
 
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc38_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(1, 1, 1, "item1", "");
-        Item item2 = new Item(1, 1, 1, "item2", "");
-
-        Position pos1 = null;
-        Position pos2 = null;
-        try {
-            pos1 = new Position(1, 1, 2);
-            pos2 = new Position(3, 1, -6);
-            cont1.addItem(item1, pos1, Color.black);
-            cont1.addItem(item2, pos2, Color.black);
-
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc39_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(18, 1, 1, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(3, 1, 2);
-            cont1.addItem(item1, pos1, Color.black);
-
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc40_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(2, 1, 4, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(3, 7, 2);
-            cont1.addItem(item1, pos1, Color.black);
-
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc41_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(2, 6, 4, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(3, 2, 5);
-            cont1.addItem(item1, pos1, Color.black);
-
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc42_ecp2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(2, 3, 4, "item1", "");
-        Item item2 = new Item(2, 2, 1, "item2", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(3, 2, 5);
-            cont1.addItem(item1, pos1, Color.black);
-            cont1.addItem(item2, pos1, Color.fuchsia);
-
-            assertThrows(PositionException.class, () -> cont1.validate());
-        } catch (PositionException | ContainerException e) {
-        }
-
-    }
-
-    @Test
-    void tc43_bva1_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(19, 8, 9, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(0, 1, 0);
-            cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
-        }
-        assertDoesNotThrow(() -> cont1.validate());
-    }
-
-    @Test
-    void tc44_bva2_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(5, 5, 5, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(-1, 0, 1);
-            cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
-        }
-        assertThrows(PositionException.class, () -> cont1.validate());
-    }
-
-    @Test
-    void tc45_bva3_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(20, 10, 10, "item1", "");
-
-        Position pos1 = null;
-        try {
-            pos1 = new Position(0, -1, 0);
-            cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
-        }
-        assertThrows(PositionException.class, () -> cont1.validate());
-    }
-
-    @Test
-    void tc46_bva4_testeValidarContentor() {
-        Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(20, 10, 10, "item1", "");
-
-        Position pos1 = null;
         try {
             pos1 = new Position(0, 0, 0);
+
             cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
         }
-        assertDoesNotThrow(() -> cont1.validate());
     }
 
     @Test
-    void tc47_bva4_testeValidarContentor() {
+    void tc50_bva2_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(19, 8, 8, "item1", "");
-
+        Item item1 = new Item(1, 1, 1, "item1", "");
         Position pos1 = null;
+
         try {
-            pos1 = new Position(2, 0, 1);
+            pos1 = new Position(19, 9, 9);
+
             cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
         }
-        assertThrows(PositionException.class, () -> cont1.validate());
     }
 
     @Test
-    void tc48_bva5_testeValidarContentor() {
+    void tc51_bva3_testeValidarContentor() {
         Container cont1 = new Container("cont1", 20, 10, 10, 3);
-        Item item1 = new Item(5, 5, 10, "item1", "");
-
+        Item item1 = new Item(1, 1, 1, "item1", "");
         Position pos1 = null;
+
         try {
-            pos1 = new Position(1, 0, 1);
+            pos1 = new Position(0, 9, 0);
+
             cont1.addItem(item1, pos1, Color.black);
-        } catch (PositionException | ContainerException e) {
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
         }
-        assertDoesNotThrow(() -> cont1.validate());
     }
+
+    @Test
+    void tc52_bva4_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(1, 8, 10);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertThrows(PositionException.class,() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc53_bva5_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(18, 1, 8);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc54_bva6_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(19, 10, 10);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertThrows(PositionException.class,() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+
+    @Test
+    void tc55_bva7_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 3);
+            pos2 = new Position(8, 2, 4);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc56_bva8_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 8);
+            pos2 = new Position(8, 2, 4);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc57_bva9_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 7);
+            pos2 = new Position(11, 2, 4);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc58_bva10_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 7);
+            pos2 = new Position(7, 2, 6);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc59_bva11_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 2, 7);
+            pos2 = new Position(6, 3, 6);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc60_bva12_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(2, 1, 4, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(9, 4, 7);
+            pos2 = new Position(6, 3, 6);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc61_bva13_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+
+        assertDoesNotThrow(() -> cont1.validate());
+
+    }
+
+    @Test
+    void tc62_bva14_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(1, 1, 1, "item1", "");
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(9, 4, 7);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc63_bva15_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 4, 1, 1, 3);
+        Item item1 = new Item(2, 1, 1, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(0,0 , 0);
+            pos2 = new Position(2, 0, 0);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc64_bva16_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(20, 10, 10, "item1", "");
+        Position pos1 = null;
+
+        try {
+            pos1 = new Position(0, 0, 0);
+
+            cont1.addItem(item1, pos1, Color.black);
+
+            assertDoesNotThrow(() -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+    @Test
+    void tc65_bva17_testeValidarContentor() {
+        Container cont1 = new Container("cont1", 20, 10, 10, 3);
+        Item item1 = new Item(20, 10, 10, "item1", "");
+        Item item2 = new Item(1, 1, 1, "item2", "");
+        Position pos1 = null;
+        Position pos2 = null;
+
+        try {
+            pos1 = new Position(0, 0, 0);
+            pos2 = new Position(19, 9, 9);
+
+            cont1.addItem(item1, pos1, Color.black);
+            cont1.addItem(item2, pos2, Color.black);
+
+            assertThrows(ContainerException.class, () -> cont1.validate());
+
+        } catch (ContainerException | PositionException e) {
+        }
+    }
+
+
 }
 
 
